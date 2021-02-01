@@ -5,13 +5,11 @@ from YourFeed import db, login_manager
 from flask import current_app
 
 
-# grabbed from flask_login docs
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# Extension requires 4 methods. inheriting from UserMixin provides these
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -30,3 +28,6 @@ class User(db.Model, UserMixin):
             return User.query.get(user_id)
         except:
             return None
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}')"
