@@ -2,7 +2,7 @@ from flask import render_template, url_for, flash, redirect, request, Blueprint,
 from flask_login import login_user, current_user, logout_user, login_required
 from YourFeed import db, bcrypt
 from YourFeed.models import User
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, UpdateAccountForm
 
 
 users = Blueprint('users', __name__)
@@ -43,3 +43,14 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('main.home'))
+
+
+@users.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    form = UpdateAccountForm()
+    if form.validate_on_submit():
+        current_user.username, current_user.email  = form.username.data, form.email.data
+    elif request.method == 'GET':
+        form.username.data, form.email.data = current_user.username, current_user.email
+    return render_template('account.html', title='Account', form=form)
