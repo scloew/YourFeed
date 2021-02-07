@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from YourFeed import db, login_manager
@@ -15,7 +14,9 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    # interests = db.Column(db.ARRAY(db.String(120)), nullable=True)
+    # TODO: array causes error because db.Array only works with postrgress. Going to use Text
+    # TODO: for now but should find better fix
+    interests = db.Column(db.Text)
 
     def get_reset_token(self, expires_sec=1800):
         serializer = Serializer(current_app.config['SECRET_KEY'], expires_sec)

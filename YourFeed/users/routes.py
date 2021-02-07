@@ -54,3 +54,9 @@ def account():
     elif request.method == 'GET':
         form.username.data, form.email.data = current_user.username, current_user.email
     return render_template('account.html', title='Account', form=form)
+
+
+@login_required
+def interests():
+    # TODO add form and body
+    return render_template('account.html', title='Account', form=form)
